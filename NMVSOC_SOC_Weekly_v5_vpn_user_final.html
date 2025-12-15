@@ -440,6 +440,13 @@
         let usageChart, locationChart, timeChart;
         let reportData = [];
         
+        // HTML escape function to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
         // Initialize charts
         function initializeCharts() {
             // Usage Chart
@@ -595,13 +602,13 @@
             reportData.forEach(user => {
                 const row = tbody.insertRow();
                 row.innerHTML = `
-                    <td>${user.userId}</td>
-                    <td>${user.username}</td>
-                    <td>${user.connections}</td>
-                    <td>${user.dataTransfer}</td>
-                    <td>${user.locations}</td>
-                    <td><span class="risk-badge risk-${user.risk?.toLowerCase() || 'unknown'}">${user.risk || 'Unknown'}</span></td>
-                    <td>${user.notes || ''}</td>
+                    <td>${escapeHtml(String(user.userId || ''))}</td>
+                    <td>${escapeHtml(String(user.username || ''))}</td>
+                    <td>${escapeHtml(String(user.connections || ''))}</td>
+                    <td>${escapeHtml(String(user.dataTransfer || ''))}</td>
+                    <td>${escapeHtml(String(user.locations || ''))}</td>
+                    <td><span class="risk-badge risk-${escapeHtml(user.risk?.toLowerCase() || 'unknown')}">${escapeHtml(String(user.risk || 'Unknown'))}</span></td>
+                    <td>${escapeHtml(String(user.notes || ''))}</td>
                 `;
             });
         }
